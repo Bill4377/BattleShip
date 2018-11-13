@@ -41,7 +41,6 @@ public class ShipSetupWindow extends BorderPane {
         init();
         //this.setLeft(leftPane);
 
-        HBox.setHgrow(gamingBoard1, Priority.ALWAYS);
         this.setCenter(hBox);
         this.setLeft(leftPane);
     }
@@ -51,21 +50,10 @@ public class ShipSetupWindow extends BorderPane {
      */
     private void init() {
         vBox = new VBox();
-        hBox = new HBox();
         leftPane = new Pane();
-        gamingBoard1 = new GamingBoard();
-
-        vBox.setSpacing(10);
-        vBox.setStyle("-fx-background-color: #99afdb;");
-        hBox.setStyle("-fx-background-color: #005e80;");
-
-        leftPane.setStyle("-fx-background-color: #99afdb;");
 
         createShips();
-        leftPane.getChildren().add(vBox);
-        hBox.getChildren().add(gamingBoard1);
-
-        HBox.setMargin(gamingBoard1, new Insets(2, 2, 2, 2));
+        createGamingBoard();
 
     }
 
@@ -93,13 +81,22 @@ public class ShipSetupWindow extends BorderPane {
             vBox.getChildren().add(p);
         }
         vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
+        vBox.setStyle("-fx-background-color: #99afdb;");
+        leftPane.setStyle("-fx-background-color: #99afdb;");
+        leftPane.getChildren().add(vBox);
     }
 
     /**
      * Creates the Grid of the game.s
      */
-    private void createGameBoard() {
-
+    private void createGamingBoard() {
+        hBox = new HBox();
+        gamingBoard1 = new GamingBoard();
+        hBox.setStyle("-fx-background-color: #005e80;");
+        hBox.getChildren().add(gamingBoard1);
+        HBox.setMargin(gamingBoard1, new Insets(2, 2, 2, 2));
+        HBox.setHgrow(gamingBoard1, Priority.ALWAYS);
     }
 
 }
