@@ -39,8 +39,6 @@ public class ShipSetupWindow extends BorderPane {
     public ShipSetupWindow() {
 
         init();
-        //this.setLeft(leftPane);
-
         this.setCenter(hBox);
         this.setLeft(leftPane);
     }
