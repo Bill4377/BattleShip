@@ -30,6 +30,8 @@ public class ShipFactory {
             return new Ship4();
         } else if (type.equals("ship5")) {
             return new Ship5();
+        } else if (type.equals("ship2")) {
+            return new Ship2();
         }
 
         return null;

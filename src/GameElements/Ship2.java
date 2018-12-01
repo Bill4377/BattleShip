@@ -15,14 +15,14 @@ import javafx.scene.layout.GridPane;
  *
  * @author Bill
  */
-public class Ship5 extends Ship {
+public class Ship2 extends Ship {
 
     private final int size;
     private ArrayList<Label> labels;
     private GridPane grid;
 
-    public Ship5() {
-        size = 5;
+    public Ship2() {
+        size = 2;
         labels = null;
         grid = null;
         constructLabels();
@@ -30,7 +30,7 @@ public class Ship5 extends Ship {
 
     @Override
     public void _draw() {
-        System.out.println("Ship5");
+        System.out.println("Ship2");
     }
 
     @Override

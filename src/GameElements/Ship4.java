@@ -6,7 +6,9 @@
 package GameElements;
 
 import java.util.ArrayList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -23,7 +25,6 @@ public class Ship4 extends Ship {
         size = 4;
         labels = null;
         grid = null;
-        constructLabels();
         constructLabels();
     }
 
@@ -54,13 +55,21 @@ public class Ship4 extends Ship {
             grid = new GridPane();
             for (int i = 0; i < this.size; i++) {
                 Label label = new Label();
-                label.setStyle("-fx-background-color: "+super.color+";");
+                label.setStyle("-fx-background-color: "+super.shipColor+";");
                 label.setPrefSize(labelSz, labelSz);
+                label.setUserData(this.size);
                 labels.add(label);
                 grid.add(label, i, 0);
             }
         } else {
             System.out.println("Cant re-Construct labels!");
+        }
+    }
+    
+    @Override
+    public void addMouseHandler(EventHandler<MouseEvent> m){
+        for (int i = 0; i < this.size; i++) {
+            this.labels.get(i).setOnMouseClicked(m);
         }
     }
 

@@ -6,7 +6,9 @@
 package GameElements;
 
 import java.util.ArrayList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -15,7 +17,7 @@ import javafx.scene.layout.GridPane;
  */
 public abstract class Ship extends Label {
 
-    public String color = "#1f2e2e";
+    public static final String shipColor = "#1f2e2e";
     public final double labelSz = 50;
     
     public abstract void _draw();
@@ -42,4 +44,11 @@ public abstract class Ship extends Label {
      * @return
      */
     public abstract GridPane getGrid();
+    
+    
+    /**
+     * adds the specific event handler on every label
+     * @param m 
+     */
+    public abstract void addMouseHandler(EventHandler<MouseEvent> m);
 }
