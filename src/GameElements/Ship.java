@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 package GameElements;
-
+import static GlobalVariables.StaticVariables.shipColor;
 import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+
 
 /**
  *
@@ -17,7 +18,7 @@ import javafx.scene.layout.GridPane;
  */
 public abstract class Ship extends Label {
 
-    public static final String shipColor = "#1f2e2e";
+   
     public final double labelSz = 50;
     
     public abstract void _draw();

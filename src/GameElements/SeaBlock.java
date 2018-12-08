@@ -20,7 +20,7 @@ public class SeaBlock extends Label {
     /**
      * The color of a SeaBlock
      */
-    public static final String color = "-fx-background-color: #0099ff;";
+    public static final String color = "-fx-background-color: #0f5e9c;";
 
     /**
      * Constructor for the sea block

@@ -6,7 +6,9 @@
 package GameElements;
 
 import static GameElements.SeaBlock.color;
-import static GameElements.Ship.shipColor;
+import static GlobalVariables.StaticVariables.shipColor;
+import static GlobalVariables.StaticVariables.dimensions;
+import java.util.ArrayList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -19,11 +21,8 @@ import javafx.util.Pair;
  */
 public class GamingBoard extends GridPane {
 
-    /**
-     * The Dimensions of the Board
-     */
-    public static final int dimensions = 10;
     private SeaBlock[][] seaBlocks;
+    private ArrayList<ShipCoordinates> ships = new ArrayList<>();
 
     /**
      * Gaming Board Constructor This is the board that contains the ships.
@@ -38,10 +37,12 @@ public class GamingBoard extends GridPane {
      */
     private void initTheGrid() {
 
+        // Styling.
         this.setHgap(2);
         this.setVgap(2);
-        this.setStyle("-fx-background-color: #005e80;");
+        this.setStyle("-fx-background-color: #74ccf4;");
 
+        // Initialization of Elements.
         seaBlocks = new SeaBlock[dimensions][dimensions];
 
         for (int i = 0; i < dimensions; i++) {
@@ -95,7 +96,7 @@ public class GamingBoard extends GridPane {
             }
         }
     }
-    
+
     /**
      * Adds mouseListeners to the SeaBlocks
      *
@@ -108,9 +109,6 @@ public class GamingBoard extends GridPane {
             }
         }
     }
-    
-    
-    
 
     /**
      * Previews if we can place a ship on the current block at [x][y]
@@ -118,8 +116,8 @@ public class GamingBoard extends GridPane {
      * @param x coordinates on x axis
      * @param y coordinates on y axis
      * @param type what type of ship we want to place ship4, ship5, ship3,
-     * ship2, indicates the size of the ship
-     * if set to 0 means we have currently selected no ship to preview
+     * ship2, indicates the size of the ship if set to 0 means we have currently
+     * selected no ship to preview
      * @param orientation horizontal or vertical placement.
      */
     public void previewShip(int x, int y, int type, String orientation) {
@@ -140,7 +138,6 @@ public class GamingBoard extends GridPane {
                             seaBlocks[i][y].setStyle("-fx-background-color: #fc4a40");
                         }
                     } else if (returnSize > type) {
-                        System.out.println("Type: " + returnSize);
                         for (int i = x; i < x + type; i++) {
                             seaBlocks[i][y].setStyle("-fx-background-color: #fc4a40");
                         }
@@ -219,6 +216,81 @@ public class GamingBoard extends GridPane {
             } // end-if
         }
 
+    }
+
+    /**
+     * places the ship on the grid
+     *
+     * @param x coordinates on x axis
+     * @param y coordinates on y axis
+     * @param type what type of ship we want to place ship4, ship5, ship3, ship2
+     * @param orientation horizontal or vertical placement.
+     */
+    public void placeShip(int x, int y, int type, String orientation) {
+        if (type != 0) {
+            if (!seaBlocks[x][y].getShipFlag()) {
+                if (orientation.equals("horizontal")) {
+
+                    int returnSize = calculate(x, y, type, orientation);
+
+                    // If we can place it
+                    if (returnSize == type) {
+                        for (int i = x; i < x + type; i++) {
+                            seaBlocks[i][y].setStyle("-fx-background-color: " + shipColor + ";");
+                            seaBlocks[i][y].shipPlacement();
+                        }
+                    }
+                } else if (orientation.equals("vertical")) {
+                    int returnSize = calculate(x, y, type, orientation);
+
+                    // If we can place it
+                    if (returnSize == type) {
+                        for (int i = y; i < y + type; i++) {
+                            seaBlocks[x][i].setStyle("-fx-background-color: " + shipColor + ";");
+                            seaBlocks[x][i].shipPlacement();
+                        }
+                    }
+                }
+            }
+
+            // here we add the ship's position to an array.
+            ShipCoordinates shipCoordinates = new ShipCoordinates(x, y, type, orientation);
+            shipCoordinates.printCoordinates();
+            ships.add(shipCoordinates);
+
+        }// end-if
+    }
+
+    public void rePlaceShip(int x, int y, String orientation) {
+        if (seaBlocks[x][y].getShipFlag()) {
+            Pair<Integer, Integer> p = searchCoordinates(x, y);
+            if (p.getKey() != -1) {
+                // pair holds the coordinates of the starting point of the ship to replace.
+                // we can also return the list of all the coordinates which it could be better.
+            }
+        }
+
+    }
+
+    /**
+     * Returns the first coordinates (where the ship starts from) of the ship
+     * that is at the x, y position.
+     *
+     * @param x
+     * @param y
+     * @return returns 0 or higher for a successful search or -1 for a failure.
+     */
+    private Pair<Integer, Integer> searchCoordinates(int x, int y) {
+        Pair<Integer, Integer> p;
+        for (ShipCoordinates i : this.ships) {
+            if (i.searchForCoordinates(x, y)) {
+                int myX = i.getStartX();
+                int myY = i.getStartY();
+                p = new Pair<>(myX, myY);
+                return p;
+            }
+        }
+        return p = new Pair<>(-1, -1);
     }
 
     /**
@@ -327,45 +399,4 @@ public class GamingBoard extends GridPane {
         return counter;
     }
 
-    /**
-     * places the ship on the grid
-     *
-     * @param x coordinates on x axis
-     * @param y coordinates on y axis
-     * @param type what type of ship we want to place ship4, ship5, ship3, ship2
-     * @param orientation horizontal or vertical placement.
-     */
-    public void placeShip(int x, int y, int type, String orientation) {
-        if (type != 0) {
-            if (!seaBlocks[x][y].getShipFlag()) {
-                if (orientation.equals("horizontal")) {
-
-                    int returnSize = calculate(x, y, type, orientation);
-
-                    // If we can place it
-                    if (returnSize == type) {
-                        for (int i = x; i < x + type; i++) {
-                            seaBlocks[i][y].setStyle("-fx-background-color: " + shipColor + ";");
-                            seaBlocks[i][y].shipPlacement();
-                        }
-                    }
-                } else if (orientation.equals("vertical")) {
-                    int returnSize = calculate(x, y, type, orientation);
-
-                    // If we can place it
-                    if (returnSize == type) {
-                        for (int i = y; i < y + type; i++) {
-                            seaBlocks[x][i].setStyle("-fx-background-color: " + shipColor + ";");
-                            seaBlocks[x][i].shipPlacement();
-                        }
-                    }
-                }
-            }
-        }// end-if
-    }
-    
-    public void rePlaceShip(int x, int y, String orientation){
-        // TO DO
-    }
-    
 }

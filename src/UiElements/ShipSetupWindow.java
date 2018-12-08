@@ -1,3 +1,26 @@
+//////////////////////////////////////////////////////////////////
+//
+//
+//
+//      VBOXBORDER              CENTERHBOX
+//          |                       |
+//          V                       V
+// (Center)VBOX                gamingBoard
+//          |
+//          |   
+//          V
+//     bottomPane
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+////////////////////////////////////////////////////////////////////
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,7 +29,6 @@
 package UiElements;
 
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import GameElements.GamingBoard;
 import GameElements.SeaBlock;
 import GameElements.Ship;
@@ -20,7 +42,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -33,30 +54,37 @@ import javafx.util.Pair;
  */
 public class ShipSetupWindow extends BorderPane {
 
-    // Will be the Ship container.
-    private VBox vBox;
-    private HBox hBox;
-    private Button orientationButton;
+    // Appearance Variables.
     private BorderPane vboxBorder;
+    private VBox vBox;
+    private HBox bottomLeftHBox;
+    private Button orientationButton;
+    private Button startButton;
+    private HBox centerHBox;
+
+    // Data holders.
     private ArrayList<Ship> shipList;
-    private GamingBoard gamingBoard1;
-    private ShipFactory shipFactory;
     private int currentSelectedShipSize = 0;
     private String orientation = "horizontal";
+
+    // Class Objects.
+    private GamingBoard gamingBoard1;
+    private ShipFactory shipFactory;
+
+    // Event Handlers
     private EventHandler<Event> rightMouseHandlerClicked;
     private EventHandler<MouseEvent> mouseHandler;
     private EventHandler<MouseEvent> mouseHandlerEntered;
     private EventHandler<MouseEvent> mouseHandlerExited;
     private EventHandler<MouseEvent> orientationHandler;
     private EventHandler<MouseEvent> mouseHandlerClicked;
+    private EventHandler<MouseEvent> startHandler;
 
     /**
      * Constructor of the window that will be used for placement of the ships.
      */
     public ShipSetupWindow() {
         init();
-        this.setCenter(hBox);
-        this.setLeft(vboxBorder);
     }
 
     /**
@@ -64,19 +92,22 @@ public class ShipSetupWindow extends BorderPane {
      */
     private void init() {
         vBox = new VBox();
+        bottomLeftHBox = new HBox();
         vboxBorder = new BorderPane();
 
         createEventHandlers();
         createShips();
         createGamingBoard();
         createButtons();
+        addEventListeners();
 
-        gamingBoard1.addMouseEnteredHandler(mouseHandlerEntered);
-        gamingBoard1.addMouseExitedHandler(mouseHandlerExited);
-        gamingBoard1.addMouseClickedHandler(mouseHandlerClicked);
-        gamingBoard1.addRightMouseClickedHandler(rightMouseHandlerClicked);
+        bottomLeftHBox.setPadding(new Insets(15, 12, 15, 12));
+        bottomLeftHBox.setSpacing(10);
+        bottomLeftHBox.getChildren().addAll(orientationButton, startButton);
+        vboxBorder.setBottom(bottomLeftHBox);
 
-        vboxBorder.setBottom(orientationButton);
+        this.setCenter(centerHBox);
+        this.setLeft(vboxBorder);
     }
 
     /**
@@ -99,8 +130,10 @@ public class ShipSetupWindow extends BorderPane {
 
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
-        vBox.setStyle("-fx-background-color: #99afdb;");
-        vboxBorder.setStyle("-fx-background-color: #99afdb;");
+        vBox.setPadding(new Insets(15, 12, 15, 12));
+        vBox.setStyle("-fx-background-color: #457a92;");
+        vBox.setMinWidth( calculateMinWidth(shipList.get(shipList.size() - 1)) + 25 );
+        vboxBorder.setStyle("-fx-background-color: #457a92;");
         vboxBorder.setCenter(vBox);
 
     }
@@ -109,10 +142,10 @@ public class ShipSetupWindow extends BorderPane {
      * Creates the Grid of the game.
      */
     private void createGamingBoard() {
-        hBox = new HBox();
+        centerHBox = new HBox();
         gamingBoard1 = new GamingBoard();
-        hBox.setStyle("-fx-background-color: #005e80;");
-        hBox.getChildren().add(gamingBoard1);
+        centerHBox.setStyle("-fx-background-color: #005e80;");
+        centerHBox.getChildren().add(gamingBoard1);
         HBox.setMargin(gamingBoard1, new Insets(2, 2, 2, 2));
         HBox.setHgrow(gamingBoard1, Priority.ALWAYS);
     }
@@ -125,6 +158,7 @@ public class ShipSetupWindow extends BorderPane {
         mouseHandler = (MouseEvent event) -> {
             Label l = (Label) event.getSource();
             currentSelectedShipSize = (int) l.getUserData();
+            removeShip(currentSelectedShipSize);
         };
 
         // Event handler for previewing a ship placement.
@@ -154,7 +188,7 @@ public class ShipSetupWindow extends BorderPane {
             }
         };
 
-        // Event handler for previewing a ship placement.
+        // Event handler for placing a ship.
         mouseHandlerClicked = (MouseEvent event) -> {
             SeaBlock b = (SeaBlock) event.getSource();
 
@@ -166,17 +200,17 @@ public class ShipSetupWindow extends BorderPane {
             currentSelectedShipSize = 0;
         };
 
+        // When we Right Click a ship we fire this event to re position the ship
         rightMouseHandlerClicked = (Event event) -> {
             SeaBlock b = (SeaBlock) event.getSource();
             Pair<Integer, Integer> p = (Pair<Integer, Integer>) b.getUserData();
             int x = p.getKey();
             int y = p.getValue();
-            
+
             gamingBoard1.rePlaceShip(x, y, orientation);
-            
+
         };
-        
-        
+
         // Handler for the button of the orientation
         orientationHandler = (MouseEvent event) -> {
             if (orientation.equals("horizontal")) {
@@ -184,6 +218,11 @@ public class ShipSetupWindow extends BorderPane {
             } else {
                 orientation = "horizontal";
             }
+        };
+
+        // Handler for the start button.
+        startHandler = (MouseEvent event) -> {
+
         };
 
     }
@@ -194,6 +233,53 @@ public class ShipSetupWindow extends BorderPane {
     private void createButtons() {
         orientationButton = new Button("Orientation");
         orientationButton.setOnMouseClicked(orientationHandler);
+
+        startButton = new Button("Start");
+        startButton.setOnMouseClicked(startHandler);
+    }
+
+    /**
+     * Assigns event listeners to the elements.
+     */
+    private void addEventListeners() {
+        gamingBoard1.addMouseEnteredHandler(mouseHandlerEntered);
+        gamingBoard1.addMouseExitedHandler(mouseHandlerExited);
+        gamingBoard1.addMouseClickedHandler(mouseHandlerClicked);
+        gamingBoard1.addRightMouseClickedHandler(rightMouseHandlerClicked);
+
+    }
+
+    /**
+     * removes the ship from left pane.
+     *
+     * @param type
+     */
+    private void removeShip(int type) {
+        for (Ship i : this.shipList) {
+            if (i.getSize() == type) {
+                try {
+                    if (vBox.getChildren().remove(i.getGrid())) {
+                        break;
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("Ship Doesn't exist: -> " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * Calculates the minWidth of the left pane relative to the biggest ship in
+     * size
+     *
+     * @param size
+     * @return
+     */
+    private double calculateMinWidth(Ship ship) {
+        double x;
+        x = ship.getSize() * ship.labelSz;
+        System.out.println("X is " + x);
+        return x;
     }
 
 }
