@@ -141,7 +141,7 @@ public class ShipSetupWindow extends BorderPane {
         vBox.setSpacing(10);
         vBox.setPadding(new Insets(15, 12, 15, 12));
         vBox.setStyle("-fx-background-color: #457a92;");
-        vBox.setMinWidth(calculateMinWidth(shipList.get(shipList.size() - 1)) + 25);
+        vBox.setMinWidth(calculateMinWidth(shipList.get(0)) + 25);
         vboxBorder.setStyle("-fx-background-color: #457a92;");
         vboxBorder.setCenter(vBox);
 
@@ -302,8 +302,12 @@ public class ShipSetupWindow extends BorderPane {
         return x;
     }
 
-    
-    public void next(Stage st, Scene sc){
+    /**
+     * Creates the next window which is the PlayWindow with the 2 Boards.
+     * @param st Our Stage
+     * @param sc Our Scene
+     */
+    private void next(Stage st, Scene sc){
         sc.setRoot(new PlayWindow());
 
         st.setTitle("Battle");

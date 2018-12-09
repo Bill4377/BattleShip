@@ -8,6 +8,7 @@ package GameElements;
 import static GameElements.SeaBlock.color;
 import static GlobalVariables.StaticVariables.shipColor;
 import static GlobalVariables.StaticVariables.dimensions;
+
 import java.util.ArrayList;
 import javafx.event.Event;
 import javafx.event.EventHandler;

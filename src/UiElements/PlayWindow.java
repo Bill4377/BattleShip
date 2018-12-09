@@ -9,7 +9,6 @@ import GameElements.GamingBoard;
 import javafx.geometry.Insets;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 /**
@@ -25,9 +24,8 @@ public class PlayWindow extends BorderPane {
     public PlayWindow() {
         init();
     }
-    
-    
-    private void init(){
+
+    private void init() {
         splitPane = new SplitPane();
         splitPane.setPrefSize(1200, 720);
         splitPane.setPadding(new Insets(50, 50, 50, 50));

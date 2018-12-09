@@ -6,11 +6,7 @@
 package EntryPoint;
 
 import UiElements.MainMenu;
-import UiElements.PlayWindow;
-import UiElements.ShipSetupWindow;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -37,10 +33,9 @@ public class Main extends Application {
         primaryStage.setTitle("BattleShip - MainMenu");
 
         mainMenu = new MainMenu();
-        scene = new Scene(mainMenu, 1200, 800);
+        scene = new Scene(mainMenu, 720, 360);
         mainMenu.updateData(primaryStage, scene);
-        
-        
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
