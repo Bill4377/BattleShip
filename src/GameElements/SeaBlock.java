@@ -14,8 +14,8 @@ import javafx.scene.control.Label;
 public class SeaBlock extends Label {
 
     private boolean ship = false;
-    private final double sizeH = 310;
-    private final double sizeW = 310;
+    private final double sizeH = 300;
+    private final double sizeW = 300;
 
     /**
      * The color of a SeaBlock
@@ -66,5 +66,7 @@ public class SeaBlock extends Label {
      */
     public void shipRemovement() {
         this.ship = false;
+        this.setStyle(color);
     }
+    
 }

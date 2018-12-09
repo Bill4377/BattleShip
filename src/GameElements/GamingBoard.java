@@ -226,7 +226,9 @@ public class GamingBoard extends GridPane {
      * @param type what type of ship we want to place ship4, ship5, ship3, ship2
      * @param orientation horizontal or vertical placement.
      */
-    public void placeShip(int x, int y, int type, String orientation) {
+    public boolean placeShip(int x, int y, int type, String orientation) {
+        boolean placed = false;
+
         if (type != 0) {
             if (!seaBlocks[x][y].getShipFlag()) {
                 if (orientation.equals("horizontal")) {
@@ -239,6 +241,7 @@ public class GamingBoard extends GridPane {
                             seaBlocks[i][y].setStyle("-fx-background-color: " + shipColor + ";");
                             seaBlocks[i][y].shipPlacement();
                         }
+                        placed = true;
                     }
                 } else if (orientation.equals("vertical")) {
                     int returnSize = calculate(x, y, type, orientation);
@@ -249,27 +252,42 @@ public class GamingBoard extends GridPane {
                             seaBlocks[x][i].setStyle("-fx-background-color: " + shipColor + ";");
                             seaBlocks[x][i].shipPlacement();
                         }
+                        placed = true;
                     }
                 }
             }
 
-            // here we add the ship's position to an array.
-            ShipCoordinates shipCoordinates = new ShipCoordinates(x, y, type, orientation);
-            shipCoordinates.printCoordinates();
-            ships.add(shipCoordinates);
+            if (placed) {
+                // here we add the ship's position to an array.
+                ShipCoordinates shipCoordinates = new ShipCoordinates(x, y, type, orientation);
+                shipCoordinates.printCoordinates();
+                ships.add(shipCoordinates);
+            }
 
         }// end-if
+        return placed;
     }
 
-    public void rePlaceShip(int x, int y, String orientation) {
+    /**
+     * if we click on a ship then we have the ability to re position it.
+     *
+     * @param x coordinate on the x axis
+     * @param y coordinate on the y axis
+     * @return returns the size of the ship or zero if we didn't click on a
+     * ship.
+     */
+    public int rePlaceShip(int x, int y) {
         if (seaBlocks[x][y].getShipFlag()) {
-            Pair<Integer, Integer> p = searchCoordinates(x, y);
-            if (p.getKey() != -1) {
-                // pair holds the coordinates of the starting point of the ship to replace.
-                // we can also return the list of all the coordinates which it could be better.
+            // The list with the ship's coordinates.
+            ArrayList<Pair<Integer, Integer>> p = searchCoordinates(x, y);
+            if (p != null) {
+                for (Pair<Integer, Integer> i : p) {
+                    seaBlocks[i.getKey()][i.getValue()].shipRemovement();
+                }
+                return p.size();
             }
         }
-
+        return 0;
     }
 
     /**
@@ -280,17 +298,16 @@ public class GamingBoard extends GridPane {
      * @param y
      * @return returns 0 or higher for a successful search or -1 for a failure.
      */
-    private Pair<Integer, Integer> searchCoordinates(int x, int y) {
-        Pair<Integer, Integer> p;
+    private ArrayList<Pair<Integer, Integer>> searchCoordinates(int x, int y) {
+        ArrayList<Pair<Integer, Integer>> p;
         for (ShipCoordinates i : this.ships) {
             if (i.searchForCoordinates(x, y)) {
-                int myX = i.getStartX();
-                int myY = i.getStartY();
-                p = new Pair<>(myX, myY);
+                this.ships.remove(i);
+                p = i.getList();
                 return p;
             }
         }
-        return p = new Pair<>(-1, -1);
+        return p = null;
     }
 
     /**

@@ -19,5 +19,5 @@ public class StaticVariables {
     /**
      * the color of the ship label.
      */
-    public static final String shipColor = "#62603e";
+    public static final String shipColor = "#3e494f";
 }

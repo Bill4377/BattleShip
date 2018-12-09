@@ -40,12 +40,14 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 /**
@@ -70,6 +72,8 @@ public class ShipSetupWindow extends BorderPane {
     // Class Objects.
     private GamingBoard gamingBoard1;
     private ShipFactory shipFactory;
+    private Stage st;
+    private Scene sc;
 
     // Event Handlers
     private EventHandler<Event> rightMouseHandlerClicked;
@@ -83,7 +87,9 @@ public class ShipSetupWindow extends BorderPane {
     /**
      * Constructor of the window that will be used for placement of the ships.
      */
-    public ShipSetupWindow() {
+    public ShipSetupWindow(Stage st, Scene sc) {
+        this.sc = sc;
+        this.st = st;
         init();
     }
 
@@ -118,9 +124,12 @@ public class ShipSetupWindow extends BorderPane {
         shipList = new ArrayList<>();
 
         // Create the ships from factory
-        for (int i = 2; i < 6; i++) {
-            shipList.add(shipFactory.getShip("ship" + i));
-        }
+        
+        shipList.add(shipFactory.getShip("ship5"));
+        shipList.add(shipFactory.getShip("ship4"));
+        shipList.add(shipFactory.getShip("ship3"));
+        shipList.add(shipFactory.getShip("ship3"));
+        shipList.add(shipFactory.getShip("ship2"));
 
         // add the ships to the vBox and add the mouselistener to the ships
         for (int i = 0; i < shipList.size(); i++) {
@@ -132,7 +141,7 @@ public class ShipSetupWindow extends BorderPane {
         vBox.setSpacing(10);
         vBox.setPadding(new Insets(15, 12, 15, 12));
         vBox.setStyle("-fx-background-color: #457a92;");
-        vBox.setMinWidth( calculateMinWidth(shipList.get(shipList.size() - 1)) + 25 );
+        vBox.setMinWidth(calculateMinWidth(shipList.get(shipList.size() - 1)) + 25);
         vboxBorder.setStyle("-fx-background-color: #457a92;");
         vboxBorder.setCenter(vBox);
 
@@ -156,9 +165,13 @@ public class ShipSetupWindow extends BorderPane {
     private void createEventHandlers() {
         // Event handler for selecting a ship.
         mouseHandler = (MouseEvent event) -> {
-            Label l = (Label) event.getSource();
-            currentSelectedShipSize = (int) l.getUserData();
-            removeShip(currentSelectedShipSize);
+
+            if (currentSelectedShipSize == 0) {
+                Label l = (Label) event.getSource();
+                currentSelectedShipSize = (int) l.getUserData();
+                removeShip(currentSelectedShipSize);
+            }
+
         };
 
         // Event handler for previewing a ship placement.
@@ -195,9 +208,10 @@ public class ShipSetupWindow extends BorderPane {
             Pair<Integer, Integer> p = (Pair<Integer, Integer>) b.getUserData();
             int x = p.getKey();
             int y = p.getValue();
-            gamingBoard1.placeShip(x, y, currentSelectedShipSize, orientation);
-            // reseting the currentSelectedShipSize to 0.
-            currentSelectedShipSize = 0;
+            if (gamingBoard1.placeShip(x, y, currentSelectedShipSize, orientation)) {
+                // reseting the currentSelectedShipSize to 0.
+                currentSelectedShipSize = 0;
+            }
         };
 
         // When we Right Click a ship we fire this event to re position the ship
@@ -207,8 +221,11 @@ public class ShipSetupWindow extends BorderPane {
             int x = p.getKey();
             int y = p.getValue();
 
-            gamingBoard1.rePlaceShip(x, y, orientation);
+            int sizeToCall = gamingBoard1.rePlaceShip(x, y);
 
+            if (sizeToCall != 0) {
+                this.currentSelectedShipSize = sizeToCall;
+            }
         };
 
         // Handler for the button of the orientation
@@ -222,7 +239,10 @@ public class ShipSetupWindow extends BorderPane {
 
         // Handler for the start button.
         startHandler = (MouseEvent event) -> {
-
+            if (vBox.getChildren().isEmpty()) {
+                next(st, sc);
+                System.out.println("We can start the game.");
+            }
         };
 
     }
@@ -282,4 +302,13 @@ public class ShipSetupWindow extends BorderPane {
         return x;
     }
 
+    
+    public void next(Stage st, Scene sc){
+        sc.setRoot(new PlayWindow());
+
+        st.setTitle("Battle");
+
+        st.setHeight(800);
+        st.setWidth(1200);
+    }
 }

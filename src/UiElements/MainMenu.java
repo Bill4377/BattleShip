@@ -9,12 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
 
 /**
  *
@@ -22,10 +24,13 @@ import javafx.scene.layout.Priority;
  */
 public class MainMenu extends BorderPane {
 
+    private String playerName = "";
+    
     private Label nameLabel;
     private TextField nameTextField;
     private Button startButton;
-    
+    private Stage st;
+    private Scene sc;
     
     /**
      * constructor for the main menu pane.
@@ -89,7 +94,10 @@ public class MainMenu extends BorderPane {
 
         // Event handler for the Start Button
         EventHandler<ActionEvent> eventH = (ActionEvent event) -> {
-            System.out.println(nameTextField.getText());
+            if (!nameTextField.getText().equals("")) {
+                playerName = nameTextField.getText();
+                startNextOperation(st, sc);
+            }
         };
 
         startButton.setOnAction(eventH);
@@ -109,20 +117,18 @@ public class MainMenu extends BorderPane {
         this.setBottom(hbox2);
         return hbox;
     }
-    
-    /**
-     * Returns the name that the users has input.
-     * @return 
-     */
-    public String getName(){
-        return nameTextField.getText();
+
+    private void startNextOperation(Stage st, Scene sc){
+        sc.setRoot(new ShipSetupWindow(st, sc));
+
+        st.setTitle("BattleShip - Place your Ships " + playerName + "!");
+
+        st.setHeight(800);
+        st.setWidth(1200);
     }
     
-    /**
-     * Returns the start button.
-     * @return 
-     */
-    public Button getStartButton(){
-       return startButton;      
+    public void updateData(Stage st, Scene sc){
+        this.st = st;
+        this.sc = sc;
     }
 }

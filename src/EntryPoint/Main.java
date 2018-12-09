@@ -6,6 +6,7 @@
 package EntryPoint;
 
 import UiElements.MainMenu;
+import UiElements.PlayWindow;
 import UiElements.ShipSetupWindow;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -19,10 +20,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private MainMenu mainMenu;
-    private ShipSetupWindow shipSetupWindow;
-    private String playerName;
     private static Scene scene;
+    private MainMenu mainMenu;
 
     @Override
     public void start(Stage primaryStage) {
@@ -38,44 +37,11 @@ public class Main extends Application {
         primaryStage.setTitle("BattleShip - MainMenu");
 
         mainMenu = new MainMenu();
-        shipSetupWindow = new ShipSetupWindow();
-
-        // Event handler for the Start Button
-        EventHandler<ActionEvent> eventH = (ActionEvent event) -> {
-            if (!mainMenu.getName().equals("")) {
-                playerName = mainMenu.getName();
-                startNextOperation(primaryStage);
-            }
-        };
-        mainMenu.getStartButton().setOnAction(eventH);
-
-        scene = new Scene(mainMenu, 600, 300);
+        scene = new Scene(mainMenu, 1200, 800);
+        mainMenu.updateData(primaryStage, scene);
+        
+        
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-    /**
-     * We don't need a main class. The entry point for this project is the start
-     * function.
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
-     * Continues from the main menu display to the next window.
-     *
-     * @param primaryStage
-     */
-    private void startNextOperation(Stage primaryStage) {
-        scene.setRoot(shipSetupWindow);
-
-        primaryStage.setTitle("BattleShip - Place your Ships " + playerName + "!");
-
-        primaryStage.setHeight(800);
-        primaryStage.setWidth(1200);
-    }
-
 }
