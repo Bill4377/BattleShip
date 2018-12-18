@@ -308,7 +308,7 @@ public class ShipSetupWindow extends BorderPane {
      * @param sc Our Scene
      */
     private void next(Stage st, Scene sc){
-        sc.setRoot(new PlayWindow());
+        sc.setRoot(new PlayWindow(gamingBoard1, this.st, this.sc));
 
         st.setTitle("Battle");
 

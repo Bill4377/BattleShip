@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  */
 public class MainMenu extends BorderPane {
 
-    private String playerName = "";
+    public static String playerName;
     
     private Label nameLabel;
     private TextField nameTextField;
@@ -118,6 +118,11 @@ public class MainMenu extends BorderPane {
         return hbox;
     }
 
+    /**
+     * opens the next window of the game.
+     * @param st
+     * @param sc 
+     */
     private void startNextOperation(Stage st, Scene sc){
         sc.setRoot(new ShipSetupWindow(st, sc));
 
@@ -127,6 +132,11 @@ public class MainMenu extends BorderPane {
         st.setWidth(1200);
     }
     
+    /**
+     * sets the current scene and stage.
+     * @param st
+     * @param sc 
+     */
     public void updateData(Stage st, Scene sc){
         this.st = st;
         this.sc = sc;
