@@ -5,6 +5,7 @@
  */
 package AI;
 
+import GameElements.GamingBoard;
 import javafx.util.Pair;
 
 /**
@@ -17,6 +18,16 @@ abstract public class AI_Difficulty{
     protected int[][] grid;
     // Variable to initiate or not the 2d array with 0's
     protected boolean initiated = false;
+    // Enemy's gamingBoard.
+    protected GamingBoard board;
+    
+    /**
+     * Sets the enemy's gaming board for the difficulties to work.
+     * @param b 
+     */
+    public void setBoard(GamingBoard b){
+        this.board = b;
+    }
 
     /**
      * Initiates the 2d array grid with 0's

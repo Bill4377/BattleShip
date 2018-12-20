@@ -7,6 +7,7 @@ package UiElements;
 
 import AI.AI;
 import AI.AI_Easy;
+import AI.AI_Hard;
 import GameElements.GamingBoard;
 import GameElements.SeaBlock;
 import static UiElements.MainMenu.playerName;
@@ -63,9 +64,8 @@ public class PlayWindow extends BorderPane {
      */
     private void init() {
 
-        ai = new AI(new AI_Easy(), playersBoard);
-        
-        
+        ai = new AI(new AI_Hard(), playersBoard);
+
         pName = new Label(playerName);
         pName.setStyle("-fx-text-fill: #ea2a40;"
                 + "-fx-font-size: 20pt;");
@@ -121,6 +121,7 @@ public class PlayWindow extends BorderPane {
             cName.setStyle("-fx-text-fill: #9ac5ed;"
                     + "-fx-font-size: 20pt;");
             this.round = "computer";
+            aiTurn();
         } else {
             pName.setStyle("-fx-text-fill: #9ac5ed;"
                     + "-fx-font-size: 20pt;");
@@ -142,6 +143,12 @@ public class PlayWindow extends BorderPane {
             endCheck();
             changeRound();
         }
+    }
+
+    private void aiTurn() {
+        ai.hit();
+        endCheck();
+        changeRound();
     }
 
     /**

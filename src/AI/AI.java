@@ -26,6 +26,7 @@ public class AI {
      */
     public AI(AI_Difficulty difficulty, GamingBoard enemyBoard){
         this.difficulty = difficulty;
+        this.difficulty.board = enemyBoard;
         this.enemyBoard = enemyBoard;
     }
     
