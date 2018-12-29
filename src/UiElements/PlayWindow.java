@@ -6,8 +6,7 @@
 package UiElements;
 
 import AI.AI;
-import AI.AI_Easy;
-import AI.AI_Hard;
+import AI.AI_Difficulty;
 import GameElements.GamingBoard;
 import GameElements.SeaBlock;
 import static UiElements.MainMenu.playerName;
@@ -31,6 +30,7 @@ public class PlayWindow extends BorderPane {
     // Data.
     private String round = "player";
     private AI ai;
+    private AI_Difficulty difficulty;
 
     // GUI and Elements
     private Label pName;
@@ -52,9 +52,10 @@ public class PlayWindow extends BorderPane {
      * @param st
      * @param sc
      */
-    public PlayWindow(GamingBoard playersBoard, Stage st, Scene sc) {
+    public PlayWindow(GamingBoard playersBoard, Stage st, Scene sc, AI_Difficulty d) {
         this.st = st;
         this.sc = sc;
+        this.difficulty = d;
         this.playersBoard = playersBoard;
         init();
     }
@@ -63,8 +64,7 @@ public class PlayWindow extends BorderPane {
      * initializes the main components of the window
      */
     private void init() {
-
-        ai = new AI(new AI_Hard(), playersBoard);
+        ai = new AI(this.difficulty, playersBoard);
 
         pName = new Label(playerName);
         pName.setStyle("-fx-text-fill: #ea2a40;"
@@ -111,6 +111,31 @@ public class PlayWindow extends BorderPane {
     }
 
     /**
+     * simulates the attack on a block by the user if its the users turn to
+     * play.
+     *
+     * @param b
+     */
+    private void hit(SeaBlock b) {
+        if (round.equals("player")) {
+            System.out.println("parent " + b.getParent().getParent());
+            if (b.hit()) {
+                endCheck();
+                changeRound();
+            }
+        }
+    }
+
+    /**
+     * This method simulates the AI's attacks.
+     */
+    private void aiTurn() {
+        ai.hit();
+        endCheck();
+        changeRound();
+    }
+
+    /**
      * changes the current player that can make a move.
      *
      */
@@ -132,38 +157,18 @@ public class PlayWindow extends BorderPane {
     }
 
     /**
-     * simulates the attack on a block by the user if its the users turn to
-     * play.
-     *
-     * @param b
-     */
-    private void hit(SeaBlock b) {
-        if (round.equals("player")) {
-            b.hit();
-            endCheck();
-            changeRound();
-        }
-    }
-
-    private void aiTurn() {
-        ai.hit();
-        endCheck();
-        changeRound();
-    }
-
-    /**
      * Checks if there are any ships left and ends the game if there are not
      * any.
      */
     private void endCheck() {
         if (this.round.equals("player")) {
             if (!computersBoard.shipsLeft()) {
-                System.out.println("Player Won!");
+                resultAnnouncement("player");
                 endGame();
             }
         } else {
             if (!playersBoard.shipsLeft()) {
-                System.out.println("Computer Won!");
+                resultAnnouncement("computer");
                 endGame();
             }
         }
@@ -179,6 +184,21 @@ public class PlayWindow extends BorderPane {
 
         st.setHeight(800);
         st.setWidth(1200);
+    }
+
+    /**
+     * Displays the results of the game.
+     *
+     * @param name
+     */
+    private void resultAnnouncement(String name) {
+        EndGameAnnouncementWindow e = new EndGameAnnouncementWindow();
+        e.event(this.st, name);
+    }
+
+    private void difficultWindow(String name) {
+        DifficultyWindow e = new DifficultyWindow();
+        e.event(this.st, name);
     }
 
 }

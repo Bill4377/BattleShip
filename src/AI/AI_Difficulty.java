@@ -12,7 +12,7 @@ import javafx.util.Pair;
  *
  * @author Bill
  */
-abstract public class AI_Difficulty{
+abstract public class AI_Difficulty {
 
     // The grid that we hit.
     protected int[][] grid;
@@ -20,33 +20,36 @@ abstract public class AI_Difficulty{
     protected boolean initiated = false;
     // Enemy's gamingBoard.
     protected GamingBoard board;
-    
+
     /**
      * Sets the enemy's gaming board for the difficulties to work.
-     * @param b 
+     *
+     * @param b
      */
-    public void setBoard(GamingBoard b){
+    public void setBoard(GamingBoard b) {
         this.board = b;
     }
 
     /**
      * Initiates the 2d array grid with 0's
-    */
+     */
     abstract protected void init();
-    
+
     /**
-     * This is the Main Algorithm that we use to hit a target
-     * (this is from the strategy design pattern)
-     * @return 
+     * This is the Main Algorithm that we use to hit a target (this is from the
+     * strategy design pattern)
+     *
+     * @return
      */
     abstract public Pair<Integer, Integer> hit();
-    
+
     /**
      * Checks if we have hit the current coordinates.
+     *
      * @param x
      * @param y
-     * @return 
+     * @return
      */
     abstract protected boolean avaliable(int x, int y);
-    
+
 }

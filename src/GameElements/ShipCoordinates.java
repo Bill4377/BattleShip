@@ -115,9 +115,10 @@ public class ShipCoordinates {
 
     /**
      * Searches if the ships coordinates match with the given ones.
+     *
      * @param x
      * @param y
-     * @return 
+     * @return
      */
     public boolean searchForCoordinates(int x, int y) {
         for (Pair<Integer, Integer> i : this.shipCoordinatesList) {

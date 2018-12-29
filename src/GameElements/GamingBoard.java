@@ -328,14 +328,14 @@ public class GamingBoard extends GridPane {
 
     /**
      * Hits a ship at those coordinates.
+     *
      * @param x
-     * @param y 
+     * @param y
      */
-    public void attackShip(int x, int y){
-        seaBlocks[x][y].hit();
+    public void attackShip(int x, int y) {
+        boolean b = seaBlocks[x][y].hit();
     }
-    
-    
+
     /**
      * Checks and returns if there are any ships left.
      *

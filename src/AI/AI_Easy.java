@@ -25,24 +25,23 @@ public class AI_Easy extends AI_Difficulty {
 
         int x = rand.nextInt(dimensions);
         int y = rand.nextInt(dimensions);
-        
+
         while (!avaliable(x, y)) {
             x = rand.nextInt(dimensions);
-            y = rand.nextInt(dimensions);            
+            y = rand.nextInt(dimensions);
         }
-        
-        
+
         this.grid[x][y] = 1;
-        
+
         Pair<Integer, Integer> p = new Pair<>(x, y);
         return p;
     }
 
     @Override
     protected void init() {
-        
+
         grid = new int[dimensions][dimensions];
-        
+
         for (int i = 0; i < dimensions; i++) {
             for (int j = 0; j < dimensions; j++) {
                 grid[i][j] = 0;

@@ -37,7 +37,8 @@ public class AI {
      */
     public void hit(){
         Pair<Integer, Integer> p = this.difficulty.hit();
-        System.out.println("Coordinates TO HIT: "+p.getKey()+"  "+p.getValue());
+        //System.out.println("Coordinates TO HIT: "+p.getKey()+"  "+p.getValue());
+        System.out.println("Difficulty: " + this.difficulty.toString());
         enemyBoard.attackShip(p.getKey(), p.getValue());
     }
     

@@ -4,13 +4,12 @@
  * and open the template in the editor.
  */
 package GameElements;
-import static GlobalVariables.StaticVariables.shipColor;
+
 import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
 
 /**
  *
@@ -18,9 +17,8 @@ import javafx.scene.layout.GridPane;
  */
 public abstract class Ship extends Label {
 
-   
     public final double labelSz = 50;
-    
+
     public abstract void _draw();
 
     public abstract void constructLabels();
@@ -45,11 +43,11 @@ public abstract class Ship extends Label {
      * @return
      */
     public abstract GridPane getGrid();
-    
-    
+
     /**
      * adds the specific event handler on every label
-     * @param m 
+     *
+     * @param m
      */
     public abstract void addMouseHandler(EventHandler<MouseEvent> m);
 }

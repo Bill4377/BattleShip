@@ -25,13 +25,13 @@ import javafx.stage.Stage;
 public class MainMenu extends BorderPane {
 
     public static String playerName;
-    
+
     private Label nameLabel;
     private TextField nameTextField;
     private Button startButton;
     private Stage st;
     private Scene sc;
-    
+
     /**
      * constructor for the main menu pane.
      */
@@ -120,10 +120,11 @@ public class MainMenu extends BorderPane {
 
     /**
      * opens the next window of the game.
+     *
      * @param st
-     * @param sc 
+     * @param sc
      */
-    private void startNextOperation(Stage st, Scene sc){
+    private void startNextOperation(Stage st, Scene sc) {
         sc.setRoot(new ShipSetupWindow(st, sc));
 
         st.setTitle("BattleShip - Place your Ships " + playerName + "!");
@@ -131,13 +132,14 @@ public class MainMenu extends BorderPane {
         st.setHeight(800);
         st.setWidth(1200);
     }
-    
+
     /**
      * sets the current scene and stage.
+     *
      * @param st
-     * @param sc 
+     * @param sc
      */
-    public void updateData(Stage st, Scene sc){
+    public void updateData(Stage st, Scene sc) {
         this.st = st;
         this.sc = sc;
     }

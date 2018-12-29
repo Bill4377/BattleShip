@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package GameElements;
+
 import static GlobalVariables.StaticVariables.shipColor;
 import java.util.ArrayList;
 import javafx.event.EventHandler;
@@ -56,7 +57,7 @@ public class Ship3 extends Ship {
             grid = new GridPane();
             for (int i = 0; i < this.size; i++) {
                 Label label = new Label();
-                label.setStyle("-fx-background-color: "+shipColor+";");
+                label.setStyle("-fx-background-color: " + shipColor + ";");
                 label.setPrefSize(labelSz, labelSz);
                 label.setUserData(this.size);
                 labels.add(label);
@@ -66,9 +67,9 @@ public class Ship3 extends Ship {
             System.out.println("Cant re-Construct labels or Grid!");
         }
     }
-    
+
     @Override
-    public void addMouseHandler(EventHandler<MouseEvent> m){
+    public void addMouseHandler(EventHandler<MouseEvent> m) {
         for (int i = 0; i < this.size; i++) {
             this.labels.get(i).setOnMouseClicked(m);
         }

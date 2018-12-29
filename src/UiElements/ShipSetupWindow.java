@@ -28,6 +28,9 @@
  */
 package UiElements;
 
+import AI.AI_Difficulty;
+import AI.AI_Easy;
+import AI.AI_Hard;
 import javafx.scene.layout.BorderPane;
 import GameElements.GamingBoard;
 import GameElements.SeaBlock;
@@ -35,6 +38,7 @@ import GameElements.Ship;
 import GameElements.ShipFactory;
 
 import java.util.ArrayList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 
 import javafx.event.EventHandler;
@@ -47,6 +51,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -70,6 +75,7 @@ public class ShipSetupWindow extends BorderPane {
     private String orientation = "horizontal";
 
     // Class Objects.
+    private AI_Difficulty difficulty;
     private GamingBoard gamingBoard1;
     private ShipFactory shipFactory;
     private Stage st;
@@ -110,6 +116,8 @@ public class ShipSetupWindow extends BorderPane {
         bottomLeftHBox.setPadding(new Insets(15, 12, 15, 12));
         bottomLeftHBox.setSpacing(10);
         bottomLeftHBox.getChildren().addAll(orientationButton, startButton);
+        bottomLeftHBox.setAlignment(Pos.CENTER);
+
         vboxBorder.setBottom(bottomLeftHBox);
 
         this.setCenter(centerHBox);
@@ -124,7 +132,6 @@ public class ShipSetupWindow extends BorderPane {
         shipList = new ArrayList<>();
 
         // Create the ships from factory
-        
         shipList.add(shipFactory.getShip("ship5"));
         shipList.add(shipFactory.getShip("ship4"));
         shipList.add(shipFactory.getShip("ship3"));
@@ -140,9 +147,9 @@ public class ShipSetupWindow extends BorderPane {
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
         vBox.setPadding(new Insets(15, 12, 15, 12));
-        vBox.setStyle("-fx-background-color: #457a92;");
+        vBox.setStyle("-fx-background-color: #559ad8;");
         vBox.setMinWidth(calculateMinWidth(shipList.get(0)) + 25);
-        vboxBorder.setStyle("-fx-background-color: #457a92;");
+        vboxBorder.setStyle("-fx-background-color: #559ad8;");
         vboxBorder.setCenter(vBox);
 
     }
@@ -165,13 +172,11 @@ public class ShipSetupWindow extends BorderPane {
     private void createEventHandlers() {
         // Event handler for selecting a ship.
         mouseHandler = (MouseEvent event) -> {
-
             if (currentSelectedShipSize == 0) {
                 Label l = (Label) event.getSource();
                 currentSelectedShipSize = (int) l.getUserData();
                 removeShip(currentSelectedShipSize);
             }
-
         };
 
         // Event handler for previewing a ship placement.
@@ -212,6 +217,7 @@ public class ShipSetupWindow extends BorderPane {
                 // reseting the currentSelectedShipSize to 0.
                 currentSelectedShipSize = 0;
             }
+            checkForReady();
         };
 
         // When we Right Click a ship we fire this event to re position the ship
@@ -240,8 +246,8 @@ public class ShipSetupWindow extends BorderPane {
         // Handler for the start button.
         startHandler = (MouseEvent event) -> {
             if (vBox.getChildren().isEmpty()) {
-                next(st, sc);
-                System.out.println("We can start the game.");
+                difficultyChoose();
+                System.out.println("Choose difficulty.");
             }
         };
 
@@ -256,6 +262,19 @@ public class ShipSetupWindow extends BorderPane {
 
         startButton = new Button("Start");
         startButton.setOnMouseClicked(startHandler);
+
+        startButton.setStyle("-fx-background-color: #9cb0c1;"
+                + "-fx-effect: dropshadow( one-pass-box , #4192dd , 8 , 0 , 2 , 2 );"
+                + "");
+        startButton.setMinHeight(50);
+        startButton.setMinWidth(100);
+
+        orientationButton.setStyle("-fx-background-color: #93bce1;"
+                + "-fx-effect: dropshadow( one-pass-box , #4192dd , 8 , 0 , 2 , 2 );"
+                + "");
+        orientationButton.setMinHeight(50);
+        orientationButton.setMinWidth(100);
+
     }
 
     /**
@@ -303,12 +322,87 @@ public class ShipSetupWindow extends BorderPane {
     }
 
     /**
+     * Checks if we can start the game
+     */
+    private void checkForReady() {
+        if (vBox.getChildren().isEmpty()) {
+            startButton.setStyle("-fx-background-color: #93bce1;");
+        } else {
+            startButton.setStyle("-fx-background-color: #9cb0c1;");
+        }
+    }
+
+    /**
+     * Creates a new window to choose the difficulty of the game.
+     */
+    private void difficultyChoose() {
+        Stage window = new Stage();
+        BorderPane pane = new BorderPane();
+        HBox hBox = new HBox(10);
+
+        Button hardBtn = new Button("Hard");
+        Button easyBtn = new Button("Easy");
+
+        EventHandler<ActionEvent> handler = (ActionEvent event) -> {
+            Button b = (Button) event.getSource();
+
+            if (b.getText().equals("Hard")) {
+                System.out.println("Difficulty set to hard");
+                this.difficulty = new AI_Hard();
+                window.close();
+                next(this.gamingBoard1, this.st, this.sc, this.difficulty);
+            } else if (b.getText().equals("Easy")) {
+                System.out.println("Difficulty set to easy");
+                this.difficulty = new AI_Easy();
+                window.close();
+                next(this.gamingBoard1, this.st, this.sc, this.difficulty);
+            }
+
+        };
+
+        hardBtn.setStyle("-fx-background-color: #93bce1;"
+                + "-fx-effect: dropshadow( one-pass-box , #4192dd , 8 , 0 , 2 , 2 );"
+                + "");
+        hardBtn.setMinHeight(50);
+        hardBtn.setMinWidth(100);
+
+        easyBtn.setStyle("-fx-background-color: #93bce1;"
+                + "-fx-effect: dropshadow( one-pass-box , #4192dd , 8 , 0 , 2 , 2 );"
+                + "");
+        easyBtn.setMinHeight(50);
+        easyBtn.setMinWidth(100);
+
+        hBox.setStyle("-fx-background-color: #559ad8;");
+        pane.setStyle("-fx-background-color: #559ad8;");
+
+        hardBtn.setOnAction(handler);
+        easyBtn.setOnAction(handler);
+
+        hBox.getChildren().addAll(easyBtn, hardBtn);
+        hBox.setAlignment(Pos.CENTER);
+
+        pane.setCenter(hBox);
+
+        Scene scene = new Scene(pane);
+
+        window.setScene(scene);
+
+        window.initModality(Modality.WINDOW_MODAL);
+        window.initOwner(this.st);
+        window.setHeight(200);
+        window.setWidth(500);
+        window.show();
+
+    }
+
+    /**
      * Creates the next window which is the PlayWindow with the 2 Boards.
+     *
      * @param st Our Stage
      * @param sc Our Scene
      */
-    private void next(Stage st, Scene sc){
-        sc.setRoot(new PlayWindow(gamingBoard1, this.st, this.sc));
+    private void next(GamingBoard g, Stage st, Scene sc, AI_Difficulty d) {
+        sc.setRoot(new PlayWindow(g, st, sc, d));
 
         st.setTitle("Battle");
 
