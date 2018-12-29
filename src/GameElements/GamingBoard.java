@@ -499,7 +499,7 @@ public class GamingBoard extends GridPane {
      * @return
      */
     private String orientationR() {
-        int x = randInt(2);
+        int x = randInt(3);
         if (x <= 1) {
             return "horizontal";
         } else {
