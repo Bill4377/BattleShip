@@ -19,6 +19,9 @@ public abstract class Ship extends Label {
 
     public final double labelSz = 50;
 
+    /**
+     * Prints the type of the ship
+     */
     public abstract void _draw();
 
     public abstract void constructLabels();

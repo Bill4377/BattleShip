@@ -17,6 +17,12 @@ import javafx.stage.Stage;
  */
 public class EndGameAnnouncementWindow {
 
+    /**
+     * Creates a Window to announce the winner of the Game.
+     *
+     * @param stage
+     * @param name
+     */
     public void event(Stage stage, String name) {
         Stage window = new Stage();
 

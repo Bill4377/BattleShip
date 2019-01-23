@@ -51,6 +51,9 @@ public class AI_Easy extends AI_Difficulty {
     }
 
     @Override
+    /**
+     * Checks if we have already hit a block.
+     */
     protected boolean avaliable(int x, int y) {
         if (initiated) {
             if (this.grid[x][y] == 1) {

@@ -23,46 +23,45 @@ import javafx.stage.Stage;
 public class DifficultyWindow {
 
     private AI_Difficulty difficulty;
-    
+
+    /**
+     * Creates a new Window to choose the difficulty of the AI.
+     *
+     * @param stage
+     * @param name
+     * @return
+     */
     public AI_Difficulty event(Stage stage, String name) {
         Stage window = new Stage();
         HBox hBox = new HBox(10);
-        
-        
+
         EventHandler<ActionEvent> handler = (ActionEvent event) -> {
             Button b = (Button) event.getSource();
-            if(b.getText().equals("hard")){
+            if (b.getText().equals("hard")) {
                 this.difficulty = new AI_Hard();
-            }else{
+            } else {
                 this.difficulty = new AI_Easy();
             }
-            
+
         };
 
-        
-        
         Button hardBtn = new Button("Hard");
         Button easyBtn = new Button("Easy");
-        
-        
-        
+
         hardBtn.setOnAction(handler);
-        
+
         hBox.getChildren().addAll(easyBtn, hardBtn);
-        
+
         Scene scene = new Scene(hBox);
-        
-        
+
         window.setScene(scene);
-        
+
         window.initModality(Modality.WINDOW_MODAL);
         window.initOwner(stage);
-        
+
         window.show();
-        
-        
-        
+
         return new AI_Easy();
     }
-    
+
 }
